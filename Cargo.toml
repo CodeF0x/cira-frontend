@@ -16,3 +16,4 @@ yew = { version = "0.20.0", features = ["csr"] }
 yewdux = "0.9.3"
 yew-router = "0.17"
 serde = "1.0.183"
+yew-bootstrap = "0.5.16"

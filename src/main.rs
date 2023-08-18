@@ -5,6 +5,8 @@ use serde_json::json;
 use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlDocument, HtmlInputElement};
 use yew::prelude::*;
+use yew_bootstrap::component::*;
+use yew_bootstrap::util::include_cdn;
 use yew_router::prelude::*;
 use yewdux::prelude::*;
 
@@ -23,7 +25,10 @@ enum Route {
 #[function_component]
 fn App() -> Html {
     html! {
-        <Wrapper />
+        <>
+            { include_cdn() }
+            <Wrapper />
+        </>
     }
 }
 
@@ -114,12 +119,12 @@ fn LoginMask() -> Html {
 
     html! {
         <div>
-            <input id="email" type="email" placeholder="Email" />
+            <input id="email" class="form-control" type="email" placeholder="Email" />
             <br />
-            <input id="password" type="password" placeholder="Password" />
+            <input id="password" class="form-control" type="password" placeholder="Password" />
             <br />
             <br />
-            <button {onclick}> { "Login" }</button>
+            <Button class="btn-primary" {onclick}> { "Login" }</Button>
         </div>
     }
 }
