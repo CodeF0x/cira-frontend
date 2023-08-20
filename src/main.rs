@@ -57,8 +57,6 @@ fn switch(routes: Route) -> Html {
         .to_string();
     let app_state = serde_json::from_str::<AppState>(&json_string).unwrap();
 
-    println!("{:?}", app_state);
-
     match routes {
         Route::Wrapper => {
             if !app_state.bearer_token.is_empty() {
@@ -73,13 +71,16 @@ fn switch(routes: Route) -> Html {
 fn LoginMask() -> Html {
     let (_state, dispatch) = use_store::<AppState>();
     let is_error = use_state(|| false);
+    let is_login_error = use_state(|| false);
 
     let onsubmit = {
         let is_error = is_error.clone();
+        let is_login_error = is_login_error.clone();
         Callback::from(move |event: SubmitEvent| {
             event.prevent_default();
 
             let is_error = is_error.clone();
+            let is_login_error = is_login_error.clone();
             let dispatch = dispatch.clone();
             wasm_bindgen_futures::spawn_local(async move {
                 let dispatch = dispatch.clone();
@@ -103,7 +104,7 @@ fn LoginMask() -> Html {
                     .unwrap()
                     .value();
 
-                if let Ok(response) = http::Request::post("http://localhost/login")
+                if let Ok(response) = http::Request::post("http://localhost:8081/api/login")
                     .json(&json!({"email": email, "password": password}))
                     .unwrap()
                     .send()
@@ -114,6 +115,8 @@ fn LoginMask() -> Html {
                     if status_code == 200 {
                         dispatch.reduce_mut(|state| state.bearer_token = token);
                         window().unwrap().location().reload().unwrap();
+                    } else if status_code == 401 {
+                        is_login_error.set(true);
                     }
                 } else {
                     is_error.set(true);
@@ -146,6 +149,10 @@ fn LoginMask() -> Html {
             if *is_error {
                 <div class="alert alert-danger" role="alert">
                     { "An error accoured while logging you in." }
+                </div>
+            } else if *is_login_error {
+                <div class="alert alert-danger" role="alert">
+                    { "Wrong email or password." }
                 </div>
             }
 
