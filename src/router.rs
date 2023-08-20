@@ -33,7 +33,7 @@ pub(crate) fn switch(routes: Route) -> Html {
 }
 
 #[derive(Clone, Routable, PartialEq)]
-pub enum Route {
+pub(crate) enum Route {
     #[at("/")]
     Wrapper,
 }

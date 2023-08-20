@@ -12,7 +12,7 @@ use yew_router::prelude::*;
 use yewdux::prelude::*;
 
 #[function_component]
-pub fn App() -> Html {
+pub(crate) fn App() -> Html {
     html! {
         <>
             { include_cdn() }
@@ -22,7 +22,7 @@ pub fn App() -> Html {
 }
 
 #[function_component]
-pub fn Wrapper() -> Html {
+pub(crate) fn Wrapper() -> Html {
     html! {
         <BrowserRouter>
             <Switch<Route> render={switch} />
@@ -31,7 +31,7 @@ pub fn Wrapper() -> Html {
 }
 
 #[function_component]
-pub fn LoginMask() -> Html {
+pub(crate) fn LoginMask() -> Html {
     let (_state, dispatch) = use_store::<AppState>();
     let is_error = use_state(|| false);
     let is_login_error = use_state(|| false);
