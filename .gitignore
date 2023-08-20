@@ -20,5 +20,4 @@ Cargo.lock
 dist/
 
 # Added by cargo
-
 /target
