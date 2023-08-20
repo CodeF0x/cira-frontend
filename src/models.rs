@@ -22,10 +22,31 @@ pub enum Label {
     InProgress,
 }
 
+impl ToString for Label {
+    fn to_string(&self) -> String {
+        match self {
+            Label::Feature => "Feature".to_string(),
+            Label::Bug => "Bug".to_string(),
+            Label::WontFix => "Wont Fix".to_string(),
+            Label::Done => "Done".to_string(),
+            Label::InProgress => "In Progress".to_string(),
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Copy, Eq)]
 pub enum Status {
     Open,
     Closed,
+}
+
+impl ToString for Status {
+    fn to_string(&self) -> String {
+        match self {
+            Status::Closed => "Closed".to_string(),
+            Status::Open => "Open".to_string(),
+        }
+    }
 }
 
 #[derive(Default, Clone, PartialEq, Eq, Store, Serialize, Deserialize, Debug)]

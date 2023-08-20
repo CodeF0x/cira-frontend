@@ -1,4 +1,5 @@
 use crate::components::LoginMask;
+use crate::components::TicketsList;
 use crate::models::AppState;
 use serde_json::json;
 use web_sys::window;
@@ -25,7 +26,7 @@ pub(crate) fn switch(routes: Route) -> Html {
     match routes {
         Route::Wrapper => {
             if !app_state.bearer_token.is_empty() {
-                return html! { <h1> { "Logged in" } </h1> };
+                return html! { <TicketsList /> };
             }
             html! { <LoginMask /> }
         }
