@@ -1,10 +1,21 @@
 <!DOCTYPE html><html lang="en"><head>
         <meta charset="UTF-8">
-        <title>Yew App</title>
+        <title>Cira Panel</title>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                height: 100vh;
+                width: 100vw;
+            }
+        </style>
     
-<link rel="preload" href="/cira-frontend-3e74c0832c7d1eab_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/cira-frontend-3e74c0832c7d1eab.js"></head>
-<body><script type="module">import init from '/cira-frontend-3e74c0832c7d1eab.js';init('/cira-frontend-3e74c0832c7d1eab_bg.wasm');</script><script>(function () {
+<link rel="preload" href="/cira-frontend-aab1867e81eaac9f_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/cira-frontend-aab1867e81eaac9f.js"></head>
+<body><script type="module">import init from '/cira-frontend-aab1867e81eaac9f.js';init('/cira-frontend-aab1867e81eaac9f_bg.wasm');</script><script>(function () {
     var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     var url = protocol + '//' + window.location.host + '/_trunk/ws';
     var poll_interval = 5000;
