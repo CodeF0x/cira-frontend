@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use yew::Properties;
 use yewdux::prelude::Store;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
@@ -53,4 +54,10 @@ impl ToString for Status {
 #[store(storage = "local")]
 pub(crate) struct AppState {
     pub(crate) bearer_token: String,
+}
+
+
+#[derive(Properties, PartialEq)]
+pub(crate) struct TicketViewProps {
+    pub(crate) ticket_id: i32
 }
