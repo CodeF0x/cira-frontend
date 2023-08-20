@@ -1,7 +1,8 @@
-use crate::models::AppState;
+use crate::models::{AppState, Ticket};
 use crate::router::switch;
 use crate::router::Route;
 use gloo_net::http;
+use gloo_net::http::Headers;
 use serde_json::json;
 use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlDocument, HtmlInputElement};
@@ -121,4 +122,39 @@ pub(crate) fn LoginMask() -> Html {
 
         </section>
     }
+}
+
+#[function_component]
+fn TicketsList() -> Html {
+    let (state, _dispatch) = use_store::<AppState>();
+    let tickets = use_state_eq(|| vec![]);
+
+    {
+        let tickets = tickets.clone();
+        wasm_bindgen_futures::spawn_local(async move {
+            let bearer = &state.bearer_token;
+            let headers = Headers::new();
+            headers.append("Authorization", &format!("Bearer {}", bearer));
+
+            let fetched_tickets: Vec<Ticket> = http::Request::get("http://localhost:8080/tickets")
+                .headers(headers)
+                .send()
+                .await
+                .unwrap()
+                .json()
+                .await
+                .unwrap();
+
+            tickets.set(fetched_tickets);
+        });
+    }
+
+    tickets
+        .iter()
+        .map(|ticket| {
+            html! {
+                <h1>{ &ticket.title }</h1>
+            }
+        })
+        .collect::<Html>()
 }
