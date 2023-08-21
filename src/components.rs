@@ -1,4 +1,4 @@
-use crate::models::{AppState, Ticket};
+use crate::models::{AppState, Status, Ticket, TicketViewProps};
 use crate::router::switch;
 use crate::router::Route;
 use chrono::prelude::DateTime;
@@ -183,7 +183,9 @@ pub(crate) fn TicketsList() -> Html {
                                 html! {
                                     <tr>
                                         <th scope="row">{ &ticket.id }</th>
-                                        <td>{ &ticket.title }</td>
+                                        <td>
+                                            <a href={format!("/tickets/{}", &ticket.id)}>{ &ticket.title }</a>
+                                        </td>
                                         <td>{ *&ticket.status }</td>
                                         <td>{
                                                 ticket
@@ -205,5 +207,36 @@ pub(crate) fn TicketsList() -> Html {
                 </tbody>
             </table>
         </section>
+    }
+}
+
+#[function_component]
+pub(crate) fn TicketView(props: &TicketViewProps) -> Html {
+    let (state, _dispatch) = use_store::<AppState>();
+    let ticket = use_state_eq(|| Ticket {id: 0, title: "".to_string(), body: "".to_string(), labels: vec![], assigned_user: None, last_modified: "".to_string(), created: "".to_string(), status: Status::Open});
+    let id = props.ticket_id;
+
+    {
+        let ticket = ticket.clone();
+        wasm_bindgen_futures::spawn_local(async move {
+            let ticket = ticket.clone();
+            let headers = Headers::new();
+            headers.append("Authorization", &format!("Bearer {}", state.bearer_token));
+
+            let fetch_ticket: Ticket = http::Request::get(&format!("http://localhost:8081/api/tickets/{}", id)).headers(headers).send().await.unwrap().json().await.unwrap();
+            ticket.set(fetch_ticket);
+        });
+    }
+
+
+    html! {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{ &ticket.title }</h5>
+                <h6 class="card-subtitle">{ "Status: " }{ *&ticket.status }</h6>
+                <p class="card-text">{ &ticket.body }</p>
+                <a class="card-link" href="/">{ "Back" }</a>
+            </div>
+        </div>
     }
 }

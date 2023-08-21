@@ -5,6 +5,7 @@ use serde_json::json;
 use web_sys::window;
 use yew::{html, Html};
 use yew_router::Routable;
+use crate::components::TicketView;
 
 pub(crate) fn switch(routes: Route) -> Html {
     let json_string = window()
@@ -29,6 +30,9 @@ pub(crate) fn switch(routes: Route) -> Html {
                 return html! { <TicketsList /> };
             }
             html! { <LoginMask /> }
+        },
+        Route::TicketView { id } => {
+            html! { <TicketView ticket_id={id} />}
         }
     }
 }
@@ -37,4 +41,6 @@ pub(crate) fn switch(routes: Route) -> Html {
 pub(crate) enum Route {
     #[at("/")]
     Wrapper,
+    #[at("/tickets/:id")]
+    TicketView { id: i32 }
 }
